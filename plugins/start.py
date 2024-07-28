@@ -4,6 +4,7 @@
 
 
 import os
+import sys
 import asyncio
 from pyrogram import Client, filters, __version__
 from pyrogram.enums import ParseMode
@@ -116,6 +117,19 @@ REPLY_ERROR = """<code>Use this command as a replay to any telegram message with
 
 #=====================================================================================##
 
+
+@Bot.on_message(filters.private & filters.command("restart") & filters.user(ADMINS))
+async def restart_bot(b, m):
+    restarting_message = await m.reply_text(f"⚡️<b><i>Restarting....</i></b>", disable_notification=True)
+
+    # Wait for 3 seconds
+    await asyncio.sleep(3)
+
+    # Update message after the delay
+    await restarting_message.edit_text("✅ <b><i>Successfully Restarted</i></b>")
+
+    # Restart the bot
+    os.execl(sys.executable, sys.executable, *sys.argv)
     
     
 @Bot.on_message(filters.command('start') & filters.private)
